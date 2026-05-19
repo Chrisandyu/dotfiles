@@ -1,0 +1,51 @@
+{
+    "layer": "top",
+    "position": "top",
+    "mod": "dock",
+    "height": 24,
+    "exclusive": true,
+    "passthroug 
+            "clock",
+            "hyprland/workspaces",
+            "pulseaudio",
+            "network",
+            "battery"
+        ]
+    },
+
+    // --- HARDCODED MODUL
+     ---
+
+    "clock": {
+        "format": "{:%H:%M}", // 24-hour time
+        "interval": 60
+    },
+
+    "hyprland/workspaces": {
+        "persistent-workspaces": {
+            "*": [1, 2, 3, 4, 5] // Desktops 1-5 always show
+        }
+    },
+
+    "pulseaudio": {
+        "format": "{icon}", // REMOVED {volume}% - only shows the icon
+        "format-muted": "󰝟",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pavucontrol"
+    },
+
+    "battery": {
+        "format": "{icon} {capacity}", // REMOVED % sign
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+
+    "network": {
+        "format-wifi": "",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰖪"
+        "on-click": "nm-connection-editor",  // Left-click for full settings
+            "on-click-right": "nm-applet"         // Right-click for the network list
+    }
+}

@@ -1,0 +1,62 @@
+{
+    "layer": "top",
+    "position": "top",
+    "mod": "dock",
+    "height": 24,
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "reload_style_on_change": true,
+
+    "modules-center": ["group/pill-in"],
+
+    "group/pill-in": {
+        "orientation": "horizontal",
+        "modules": [
+            "clock",
+            "hyprland/workspaces",
+            "pulseaudio",
+            "network",
+            "battery",
+        ]
+    },
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "interval": 60
+    },
+
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "active-only": false,
+        "on-click": "activate",
+        "persistent-workspaces": {
+            "*": [1, 2, 3, 4, 5]
+        },
+        "format": "{name}"
+    },
+
+    "pulseaudio": {
+        "format": "{icon}",
+        "format-muted": "󰝟",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pavucontrol"
+    },
+
+    "battery": {
+        "format": "{icon} {capacity}", 
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+
+    "network": {
+        "format-wifi": "",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰖪",
+        "on-click": "nm-connection-editor" 
+    },
+
+ 
+}

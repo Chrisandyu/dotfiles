@@ -1,0 +1,39 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 24,
+    "exclusive": true,
+    "reload_style_on_change": true,
+
+    "modules-center": ["group/pill-in"],
+
+    "group/pill-in": {
+        "orientation": "horizontal",
+        "modules": [
+            "clock",
+            "hyprland/workspaces",
+            "pulseaudio",
+            "network",
+            "battery"         ]
+    },
+
+    "hyprland/workspaces": {
+        "persistent-workspaces": {
+            "*": [1, 2, 3, 4, 5]
+        },
+        "show-special": false,
+        "active-only": false,
+        "on-click": "activate"
+    },
+
+    "clock": { "format": "{:%H:%M}" },
+    "pulseaudio": { 
+        "format": "{icon}",
+        "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] }
+    },
+    "battery": { 
+        "format": "{icon} {capacity}",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+    "network": { "format-wifi": "" }
+}
