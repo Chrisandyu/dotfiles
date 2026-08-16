@@ -8,7 +8,7 @@ window#waybar {
 }
 
 #pill-in {
-    background-color: @theme_bg_color;
+    background-color: @main-bg;
     border-radius: 15px;
     padding: 3px 12px;
     margin: 4px 0px 0px -1px;
@@ -17,7 +17,7 @@ window#waybar {
 
 #clock, #pulseaudio, #network, #battery, #custom-bat-icon  {
     font-family: "JetBrainsMono Nerd Font", "monospace";
-    color: @theme_fg_color;
+    color: @main-fg;
     font-weight: 700;
     padding: 0px 7px;
 }
@@ -54,28 +54,28 @@ window#waybar {
 }
 
 #workspaces button {
-    margin: 3px 0px; 
+    margin: 3px 0px;
     padding: 0;
     border: none;
-    color: @theme_fg_color;
+    color: @main-fg;
     opacity: 0.4;
     transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
-    
+
     min-width: 45px;
     min-height: 14px;
 }
 
 #workspaces button label {
-    padding: 0px; 
+    padding: 0px;
     font-weight: 800;
 }
 
 #workspaces button.active {
-    background: @theme_selected_bg_color;
-    color: @theme_selected_fg_color;
+    background: @wb-act-bg;
+    color: @wb-act-fg;
     border-radius: 20px;
     opacity: 1.0;
-    
+
     min-width: 45px;
     min-height: 14px;
 }

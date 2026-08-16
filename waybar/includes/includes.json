@@ -3,6 +3,7 @@
         "/home/chris/.local/share/waybar/modules/wlr-taskbar#windows.json",
         "/home/chris/.local/share/waybar/modules/image#wallpaper.json",
         "/home/chris/.local/share/waybar/modules/wlr-taskbar.json",
+        "/home/chris/.local/share/waybar/modules/user.json",
         "/home/chris/.local/share/waybar/modules/privacy.json",
         "/home/chris/.local/share/waybar/modules/tray.json",
         "/home/chris/.local/share/waybar/modules/cpu.jsonc",
@@ -11,6 +12,7 @@
         "/home/chris/.local/share/waybar/modules/group-volumecontrol.jsonc",
         "/home/chris/.local/share/waybar/modules/wlr-taskbar.jsonc",
         "/home/chris/.local/share/waybar/modules/custom-cava.jsonc",
+        "/home/chris/.local/share/waybar/modules/group-user-menu.jsonc",
         "/home/chris/.local/share/waybar/modules/custom-swaync.jsonc",
         "/home/chris/.local/share/waybar/modules/backlight.jsonc",
         "/home/chris/.local/share/waybar/modules/image#wallpaper.jsonc",
@@ -86,5 +88,12 @@
         "icon-size": 16,
         "icon-size-multiplier": 1.6
     },
-    "position": "top"
+    "position": "top",
+    "user": {
+        "format": "",
+        "interval": 60,
+        "height": 20,
+        "width": 20,
+        "icon": true
+    }
 }

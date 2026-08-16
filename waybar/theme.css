@@ -1,11 +1,7 @@
-/* To enable blur please make sure alpha is greater than 0 */
-@define-color bar-bg rgba(0, 0, 0, 0.1); 
-
-@define-color main-bg #9ca0b0;
-@define-color main-fg #4c4f69;
-
-@define-color wb-act-bg #5c5f77;
-@define-color wb-act-fg #dce0e8;
-
-@define-color wb-hvr-bg #dc8a78;
-@define-color wb-hvr-fg #dce0e8;
+@define-color bar-bg rgba(27,19,33,0.01);
+@define-color main-bg rgba(27,19,33,0.8);
+@define-color main-fg rgba(210,170,240,0.8);
+@define-color wb-act-bg rgba(240,183,189,0.4);
+@define-color wb-act-fg rgba(255,204,209,1);
+@define-color wb-hvr-bg rgba(125,75,97,0.4);
+@define-color wb-hvr-fg rgba(240,170,177,0.8);

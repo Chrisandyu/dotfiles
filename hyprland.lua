@@ -1,3 +1,19 @@
+-- Hyprland loads this file when it is started without a config, and it prefers
+-- it over hyprland.conf. HyDE loads it too, last, as the override layer below.
+-- The block keeps the two apart: hyde.lua sets `hyde` on its first line, so it
+-- runs only when this file is the entry point and HyDE has not been loaded.
+-- Removing it leaves a session with a cursor and nothing else.
+if not hyde then
+    local share = os.getenv("XDG_DATA_HOME") or (os.getenv("HOME") .. "/.local/share")
+    local entry = share .. "/hypr/hyde.lua"
+    local handle = io.open(entry, "r")
+    if not handle then
+        error("HyDE is not installed at " .. entry .. ". Run install.sh -r, or point Hyprland at your own config.")
+    end
+    handle:close()
+    dofile(entry)
+end
+
 -- Your Hyprland configuration. HyDE never overwrites this file.
 --
 -- It loads after HyDE's own binds, so settings here take precedence. Replacing
@@ -29,7 +45,7 @@
 
 
 -- ============================================
--- INPUT SETTINGS
+-- INPUT/MISC SETTINGS
 -- ============================================
 hl.config({
     input = {
@@ -43,14 +59,17 @@ hl.config({
     }
 })
 
--- ============================================
--- ANIMATIONS (disabled)
--- ============================================
 hl.config({
     animations = {
         enabled = false,
-    }
+    },
 })
+
+-- hl.env("XCURSOR_THEME", "Adwaita")
+-- hl.env("XCURSOR_SIZE", "24")
+-- hl.env("HYPRCURSOR_THEME", "Adwaita")
+-- hl.env("HYPRCURSOR_SIZE", "24")
+
 
 -- ============================================
 -- WINDOW DECORATIONS
@@ -75,6 +94,13 @@ hl.config({
             new_optimizations = true,
             ignore_opacity = true,
         },
+        shadow = {
+            enabled = false,
+        },
+        glow = {
+            enabled = false,
+        },
+        screen_shader = "",
     }
 })
 
@@ -85,17 +111,32 @@ hl.monitor({
     output = "eDP-1",
     mode = "preferred",
     position = "auto",
-    scale = 1.33  
+    scale = 1.33,
 })
 
 -- ============================================
 -- KEYBINDINGS
 -- ============================================
 
-hl.bind("SUPER + BACKSPACE", hl.dsp.exec_cmd("~/.local/bin/logoutlaunch"), {
+hl.bind("SUPER + BACKSPACE", hl.dsp.exec_cmd("~/.local/bin/wlogout-custom"), {
     description = "[System] Logout menu",
 })
 
+hl.bind("SUPER + A", hl.dsp.exec_cmd("rofi -show drun"), {
+    description = "[Launcher] Rofi app launcher",
+})
+
+hl.bind("SUPER + C", hl.dsp.exec_cmd(hyde.sh.waybar("--hide")), {
+    description = "[Window Management] Hide waybar",
+})
+
+
+hl.bind("SUPER + M", hl.dsp.exec_cmd('hyprctl setcursor "Adwaita" 20'), {
+    description = "[System] Fix mouse",
+})
+
+
+--stupid way to get rid fo 6-10???!!!
 
 local function noop() end
 
@@ -114,10 +155,16 @@ hl.bind("SUPER + SHIFT + 0", noop, { description = "[Disabled] Move to workspace
 -- ============================================
 -- STARTUP APPLICATIONS
 -- ============================================
-hl.exec_once = hl.exec_once or {}
-hl.exec_once["mako"] = true
-hl.exec_once.cmd = "mako"
+-- hl.exec_once = hl.exec_once or {}
+-- hl.exec_once["mako"] = true
+-- hl.exec_once.cmd = "mako"
 
+hl.on("hyprland.start", function()
+    hl.exec_cmd('hyprctl setcursor "Adwaita" 20')
+    hl.exec_cmd("mako")
+    -- hl.exec_cmd("sleep 5 && pkill hyprsunset ; notify-send 'hyprsunset' 'i died'")
+    -- hl.exec_cmd("sleep 2 && systemctl --user start hyprsunset.service")
+end)
 -- alternative - hyde startup system
 -- hl.exec_on("hyprland.start", function()
 --     hl.dsp.exec_cmd("mako")
@@ -126,8 +173,6 @@ hl.exec_once.cmd = "mako"
 -- ============================================
 -- HYPRIDLE SETTINGS (Power management)
 -- ============================================
--- Use the hypridle.conf file instead of Lua for idle settings
--- Create ~/.config/hypr/hypridle.conf with:
 
 -- listener {
 --     timeout = 300
@@ -145,6 +190,3 @@ hl.exec_once.cmd = "mako"
 --     on-timeout = hyprctl dispatch dpms off
 --     on-resume = hyprctl dispatch dpms on
 -- }
-
-
-
