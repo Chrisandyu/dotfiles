@@ -126,6 +126,10 @@ hl.bind("SUPER + A", hl.dsp.exec_cmd("rofi -show drun"), {
     description = "[Launcher] Rofi app launcher",
 })
 
+hl.bind("SUPER + Y", hl.dsp.exec_cmd("~/Documents/SXCTXT/launcher.sh"), {
+    description = "[Launcher] Textbook launcher",
+})
+
 hl.bind("SUPER + C", hl.dsp.exec_cmd(hyde.sh.waybar("--hide")), {
     description = "[Window Management] Hide waybar",
 })
