@@ -142,6 +142,10 @@ hl.bind("SUPER + Y", hl.dsp.exec_cmd("~/Documents/SXCTXT/launcher.sh"), {
     description = "[Launcher] Textbook launcher",
 })
 
+hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd("~/.local/bin/custom-colors"), {
+    description = "[Theming] Custom waybar/kitty colours",
+})
+
 hl.bind("SUPER + C", hl.dsp.exec_cmd(hyde.sh.waybar("--hide")), {
     description = "[Window Management] Hide waybar",
 })

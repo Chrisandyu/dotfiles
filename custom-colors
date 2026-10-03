@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+# rofi menu to override wallbash colours on waybar and kitty
+# wallpaper colours in ~/.config/custom-colors/<theme>/<wallpaper>
+# custom-colors --apply skips menu <- new cmd
+# run by wallbas on  theme or wallpaper or mode switch
+set -euo pipefail
+
+theme=$(sed -n 's/^HYDE_THEME="\(.*\)"$/\1/p' "$HOME/.local/state/hyde/staterc")
+if [ -z "$theme" ]; then
+    echo "custom-colors: no HYDE_THEME in ~/.local/state/hyde/staterc" >&2
+    exit 1
+fi
+
+# hyde points this link at the wallpaper that's on screen
+wallpaper=$(basename "$(readlink -e "$HOME/.cache/hyde/wall.set")")
+if [ -z "$wallpaper" ]; then
+    echo "custom-colors: ~/.cache/hyde/wall.set doesn't point at a wallpaper" >&2
+    exit 1
+fi
+
+state="$HOME/.config/custom-colors/$theme/$wallpaper"
+waybar_css="$HOME/.config/waybar/custom-colors.css"
+kitty_conf="$HOME/.config/kitty/custom-colors.conf"
+style='element-icon { enabled: false; size: 0em; } window { padding: 0px; } element { padding: 8px 16px; } element-text { padding: 0px; } listview { lines: 8; }'
+
+# menu name, then which app and colour name it changes
+# "waybar text" also covers unselected workspaces, waybar just fades them to 40%
+labels=("waybar background" "waybar text" "waybar selected workspace" "waybar selected workspace text" "kitty background" "kitty text")
+targets=("waybar main-bg" "waybar main-fg" "waybar wb-act-bg" "waybar wb-act-fg" "kitty background" "kitty foreground")
+
+mkdir -p "$(dirname "$state")"
+touch "$state"
+
+menu() {
+    rofi -dmenu -i -no-custom -format i -p "$1" -theme-str "$style"
+}
+
+# rebuild both override files from the saved picks, then reload
+apply() {
+    {
+        echo "/* made by ~/.local/bin/custom-colors, edits get overwritten */"
+        # keep opacity wallbash gave each colour, only swap rgb
+        awk '
+            FNR == NR {
+                if ($1 == "@define-color") {
+                    a = 1
+                    if (match($3, /,[0-9.]+\);$/)) a = substr($3, RSTART + 1, RLENGTH - 3)
+                    alpha[$2] = a
+                }
+                next
+            }
+            $1 == "waybar" {
+                if (!($2 in alpha)) {
+                    print "custom-colors: " $2 " missing from theme.css" > "/dev/stderr"
+                    exit 1
+                }
+                h = substr($3, 2)
+                printf "@define-color %s rgba(%d,%d,%d,%s);\n", $2,
+                    strtonum("0x" substr(h, 1, 2)), strtonum("0x" substr(h, 3, 2)), strtonum("0x" substr(h, 5, 2)), alpha[$2]
+            }
+        ' "$HOME/.config/waybar/theme.css" "$state"
+    } > "$waybar_css"
+    {
+        echo "# made by ~/.local/bin/custom-colors, edits get overwritten"
+        awk '$1 == "kitty" { print $2 " " $3 }' "$state"
+    } > "$kitty_conf"
+
+    pkill -USR2 -x waybar || true # fine if waybar isnt running
+    pkill -USR1 -x kitty || true # same for kitty
+}
+
+if [ "${1:-}" = "--apply" ]; then
+    apply
+    exit 0
+fi
+
+# list each colour with saved hex or "wallbash"
+rows=()
+for i in "${!labels[@]}"; do
+    hex=$(awk -v t="${targets[$i]}" '$1 " " $2 == t { print $3 }' "$state")
+    rows+=("${labels[$i]}  ${hex:-wallbash}")
+done
+rows+=("reset this wallpaper")
+
+choice=$(printf '%s\n' "${rows[@]}" | menu "$wallpaper") || exit 0
+
+if [ "$choice" -eq "${#labels[@]}" ]; then
+    : > "$state"
+    apply
+    exit 0
+fi
+
+target="${targets[$choice]}"
+action=$(printf '%s\n' "pick from screen" "type hex" "reset to wallbash" | menu "${labels[$choice]}") || exit 0
+
+case "$action" in
+    0) hex=$(hyprpicker -f hex) ;;
+    1) hex=$(rofi -dmenu -p "hex" -theme-str "$style listview { lines: 0; }" < /dev/null) || exit 0 ;;
+    2) hex="" ;;
+esac
+
+# escape = cancel
+if [ "$action" -ne 2 ] && [ -z "$hex" ]; then
+    exit 0
+fi
+
+
+grep -v "^$target " "$state" > "$state.tmp" || true
+mv "$state.tmp" "$state"
+
+if [ -n "$hex" ]; then
+    hex="#${hex#\#}"
+    if [[ ! "$hex" =~ ^#[0-9a-fA-F]{6}$ ]]; then
+        notify-send "custom colours" "\"$hex\" isn't a hex colour like #1e1e2e"
+        exit 1
+    fi
+    echo "$target $hex" >> "$state"
+fi
+
+apply
