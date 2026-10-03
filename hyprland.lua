@@ -107,12 +107,24 @@ hl.config({
 -- ============================================
 -- MONITOR SETTINGS
 -- ============================================
-hl.monitor({
-    output = "eDP-1",
-    mode = "preferred",
-    position = "auto",
-    scale = 1.33,
-})
+
+local function apply_laptop_scale()
+    local laptop = hl.get_monitor("eDP-1")
+    local docked = laptop ~= nil and #laptop.mirrors > 0
+    hl.monitor({
+        output = "eDP-1",
+        mode = "preferred",
+        position = "auto",
+        --all nums truthy in lua
+        scale = docked and 1 or 1.33,
+    })
+
+
+end
+
+apply_laptop_scale()
+hl.on("monitor.added", apply_laptop_scale)
+hl.on("monitor.removed", apply_laptop_scale)
 
 -- ============================================
 -- KEYBINDINGS
@@ -139,6 +151,8 @@ hl.bind("SUPER + M", hl.dsp.exec_cmd('hyprctl setcursor "Adwaita" 20'), {
     description = "[System] Fix mouse",
 })
 
+--mirror
+hl.monitor({ output = "desc:Samsung Electric Company LF24T450F HCPXB00872", mode = "1920x1080@75", mirror = "eDP-1" })
 
 --stupid way to get rid fo 6-10???!!!
 
