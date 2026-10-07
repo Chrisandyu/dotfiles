@@ -1,6 +1,6 @@
 {
     "label": "lock",
-    "action": "lockscreen.sh",
+    "action": "hyde-shell lock-session",
     "text": "Lock",
     "keybind": "l"
 },
@@ -14,7 +14,7 @@
 
 {
     "label": "suspend",
-    "action": "lockscreen.sh & disown && systemctl suspend",
+    "action": "hyde-shell lock-session & disown && systemctl suspend",
     "text": "Suspend",
     "keybind": "u"
 },

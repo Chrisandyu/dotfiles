@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# rofi menu to override wallbash colours on waybar and kitty
-# wallpaper colours in ~/.config/custom-colors/<theme>/<wallpaper>
-# custom-colors --apply skips menu <- new cmd
-# run by wallbas on  theme or wallpaper or mode switch
+# rofi menu to swap wallbash colours on waybar and kitty for my own
+# each wallpaper gets its own picks in ~/.config/custom-colors/<theme>/<wallpaper>, wallbash never touches them
+# "custom-colors --apply" skips the menu, wallbash runs it on every theme/wallpaper/mode switch
 set -euo pipefail
 
 theme=$(sed -n 's/^HYDE_THEME="\(.*\)"$/\1/p' "$HOME/.local/state/hyde/staterc")
@@ -39,7 +38,7 @@ menu() {
 apply() {
     {
         echo "/* made by ~/.local/bin/custom-colors, edits get overwritten */"
-        # keep opacity wallbash gave each colour, only swap rgb
+        # keep the opacity wallbash gave each colour, only swap the r g b
         awk '
             FNR == NR {
                 if ($1 == "@define-color") {
@@ -65,7 +64,7 @@ apply() {
         awk '$1 == "kitty" { print $2 " " $3 }' "$state"
     } > "$kitty_conf"
 
-    pkill -USR2 -x waybar || true # fine if waybar isnt running
+    pkill -USR2 -x waybar || true # fine if waybar isn't running
     pkill -USR1 -x kitty || true # same for kitty
 }
 
@@ -74,7 +73,7 @@ if [ "${1:-}" = "--apply" ]; then
     exit 0
 fi
 
-# list each colour with saved hex or "wallbash"
+# list each colour with its saved hex, or "wallbash" if it isn't changed
 rows=()
 for i in "${!labels[@]}"; do
     hex=$(awk -v t="${targets[$i]}" '$1 " " $2 == t { print $3 }' "$state")
@@ -99,12 +98,12 @@ case "$action" in
     2) hex="" ;;
 esac
 
-# escape = cancel
+# escape in hyprpicker or an empty hex box means cancel, not reset
 if [ "$action" -ne 2 ] && [ -z "$hex" ]; then
     exit 0
 fi
 
-
+# the old pick always goes, a new one is added back below
 grep -v "^$target " "$state" > "$state.tmp" || true
 mv "$state.tmp" "$state"
 
