@@ -1,6 +1,7 @@
 * {
     background-image: none;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove Nerd Font";
+    font-weight: 600; /* same as canvas body text */
     font-size: 16px;
 }
 
@@ -28,7 +29,9 @@ button {
     border-radius: 20px;
     margin: 5px;
     padding: 35px 60px;
-    box-shadow: 2px 2px 0px 0px rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+    text-shadow: none;
+    outline: none;
 
     transition: all 0.05s ease;
 }
@@ -47,7 +50,7 @@ button:focus {
 /* TEXTO */
 button label {
     font-size: 18px;
-    opacity: 0.6;
+    opacity: 1;
     transition: opacity 0.2s ease;
 }
 

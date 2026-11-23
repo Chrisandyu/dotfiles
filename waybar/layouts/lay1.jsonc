@@ -23,11 +23,13 @@
     },
 
     "clock": {
+        "tooltip": false,
         "format": "{:%H:%M}",
         "interval": 60
     },
 
     "hyprland/workspaces": {
+        "tooltip": false,
         "persistent-workspaces": {
             "*": [1, 2, 3, 4, 5]
         },
@@ -37,6 +39,7 @@
     },
 
     "pulseaudio": {
+        "tooltip": false,
         "format": "{icon}",
         "format-muted": "󰝟",
         "format-icons": {
@@ -46,6 +49,7 @@
     },
 
     "custom/bat-icon": {
+            "tooltip": false,
             "format": "{icon}",
             "return-type": "json",
             "exec": "echo '{\"alt\": \"'$(cat /sys/class/power_supply/BAT0/status)'\", \"percentage\": '$(cat /sys/class/power_supply/BAT0/capacity)'}'",
@@ -53,10 +57,12 @@
         },
     
         "battery": {
+            "tooltip": false,
             "format": "{capacity}", 
         },
 
     "network": {
+        "tooltip": false,
         "format-wifi": "",
         "format-ethernet": "󰈀",
         "format-disconnected": "󰖪",
