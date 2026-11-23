@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
-# copies my configs from where they're from into this repo
 
-# ./sync.sh "message"   copy+commit+push
 set -euo pipefail
 
 repo="$(cd "$(dirname "$0")" && pwd)"
 cd "$repo"
 
-# where it lives, where it goes in backup
-# trailing / replaces folder contents
+# trailing / replaces all things in folder
 files=(
     "$HOME/.config/hypr/hyprland.lua"                          "hyprland.lua"
     "$HOME/.config/hypr/hypridle.conf"                         "hypridle.conf"
@@ -31,13 +28,3 @@ for ((i = 0; i < ${#files[@]}; i += 2)); do
     mkdir -p "$(dirname "$dest")"
     rsync -a --delete "$src" "$dest"
 done
-
-git add -A
-git status --short
-
-if [ $# -eq 0 ]; then
-    exit 0
-fi
-
-git commit -m "$1"
-git push
